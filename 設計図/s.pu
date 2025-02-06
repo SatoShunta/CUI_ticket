@@ -1,0 +1,43 @@
+@startuml シーケンス図
+actor User
+actor Admin
+
+participant "タイトル画面" as TitleScreen
+participant "商品一覧画面" as ProductListScreen
+participant "商品選択画面" as ProductSelectionScreen
+participant "支払い画面" as PaymentScreen
+participant "お釣り計算画面" as ChangeCalculationScreen
+participant "終了画面" as EndScreen
+participant "管理画面" as AdminScreen
+
+== タイトル画面 ==
+User -> TitleScreen : "開始" ボタンを押す
+TitleScreen -> ProductListScreen : 商品一覧画面に遷移
+
+== 商品選択 ==
+User -> ProductListScreen : 商品選択
+ProductListScreen -> ProductSelectionScreen : 商品選択画面に遷移
+ProductSelectionScreen -> ProductListScreen : 商品情報を追加
+
+== 支払い処理 ==
+User -> ProductSelectionScreen : "購入決定"
+ProductSelectionScreen -> PaymentScreen : 支払い画面に遷移
+PaymentScreen -> User : 支払額を表示
+
+== 現金投入 ==
+User -> PaymentScreen : 現金投入
+PaymentScreen -> PaymentScreen : 投入金額を加算
+
+== お釣り計算 ==
+PaymentScreen -> ChangeCalculationScreen : お釣り計算
+ChangeCalculationScreen -> PaymentScreen : お釣り金額を表示
+
+== 購入完了 ==
+PaymentScreen -> EndScreen : 取引完了
+User -> EndScreen : 終了
+
+== 管理画面 ==
+Admin -> AdminScreen : 在庫管理・価格変更
+AdminScreen -> AdminScreen : 在庫や価格の更新
+
+@enduml
