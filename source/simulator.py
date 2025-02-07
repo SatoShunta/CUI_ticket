@@ -17,7 +17,7 @@ def display_title_screen():
     print(" 券売機シミュレータ")
     print("***********************")
     print("Please Enter (Enterキー押下で画面がクリアされて処理が進む）")
-    print("       （ESCキー押下で管理画面に処理が進む）")
+    print("       （Sキー押下で管理画面に処理が進む）")
     print("       （qキー押下でシミュレータ終了）")
 
 def display_product_menu():
@@ -73,6 +73,73 @@ def process_payment(total_price):
         except ValueError:
             print("無効な金額が入力されました。")
 
+def display_admin_menu():
+    while True:
+        clear_screen()
+        print("****** 管理画面 ******")
+        print("1. 商品リスト表示")
+        print("2. 商品追加")
+        print("3. 商品削除")
+        print("4. 商品価格変更")
+        print("5. 戻る")
+        choice = input("選択してください: ")
+
+        if choice == "1":
+            display_product_list()
+        elif choice == "2":
+            add_product()
+        elif choice == "3":
+            remove_product()
+        elif choice == "4":
+            update_product_price()
+        elif choice == "5":
+            break
+        else:
+            print("無効な入力です。")
+        input("Enterキーで続行...")
+
+def display_product_list():
+    print("\n商品リスト:")
+    for id, product in products.items():
+        print(f"{id}: {product['name']} - {product['price']}円")
+
+def add_product():
+    name = input("追加する商品の名前: ")
+    while True:
+        try:
+            price = int(input("価格: "))
+            break
+        except ValueError:
+            print("無効な価格です。整数を入力してください。")
+    product_id = max(products.keys()) + 1
+    products[product_id] = {"name": name, "price": price}
+    print(f"{name} を追加しました。")
+
+def remove_product():
+    display_product_list()
+    try:
+        product_id = int(input("削除する商品ID: "))
+        if product_id in products:
+            del products[product_id]
+            print("商品を削除しました。")
+        else:
+            print("無効なIDです。")
+    except ValueError:
+        print("無効な入力です。")
+
+def update_product_price():
+    display_product_list()
+    try:
+        product_id = int(input("価格を変更する商品ID: "))
+        if product_id in products:
+            new_price = int(input("新しい価格: "))
+            products[product_id]["price"] = new_price
+            print("価格を更新しました。")
+        else:
+            print("無効なIDです。")
+    except ValueError:
+        print("無効な入力です。")
+
 def main():
     while True:
         display_title_screen()
@@ -87,11 +154,10 @@ def main():
                     input("\nEnterキーでタイトル画面に戻る")
             else:
                 input("\nEnterキーでタイトル画面に戻る")
+        elif key == "s":  # ESCキー押下
+            display_admin_menu()
         else:
             print("無効なキーが押されました。")
 
 if __name__ == "__main__":
     main()
-
-
- 
